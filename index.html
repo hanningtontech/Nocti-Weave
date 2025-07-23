@@ -2,140 +2,402 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Dreams & Culture Questionnaire</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    label { display: block; margin: 10px 0 5px; }
-    input, select, textarea { width: 100%; padding: 8px; margin-bottom: 15px; }
-    button { padding: 10px 20px; }
-    h2 { margin-top: 30px; }
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+      line-height: 1.6;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 32px 24px;
+      min-height: calc(100vh - 40px);
+    }
+    
+    h1, h2 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #2c3e50;
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 2px solid #e9ecef;
+    }
+    
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-weight: 500;
+      color: #495057;
+      font-size: 1rem;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 16px 12px;
+      margin-bottom: 20px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      background: #fff;
+      transition: all 0.3s ease;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 20px;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    
+    button {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+      min-height: 56px;
+    }
+    
+    button:hover {
+      background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    /* Enhanced mobile responsiveness */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding: 20px 16px;
+        min-height: 100vh;
+        box-shadow: none;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+      
+      h2 {
+        font-size: 1.2rem;
+        margin-top: 24px;
+        padding-top: 16px;
+      }
+      
+      label {
+        font-size: 0.95rem;
+        margin: 16px 0 6px;
+      }
+      
+      input, select, textarea {
+        padding: 14px 12px;
+        margin-bottom: 16px;
+        font-size: 16px;
+        border-radius: 6px;
+      }
+      
+      textarea {
+        min-height: 80px;
+      }
+      
+      button {
+        padding: 14px 20px;
+        font-size: 16px;
+        margin-top: 16px;
+        min-height: 52px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px 12px;
+      }
+      
+      h1 {
+        font-size: 1.3rem;
+      }
+      
+      h2 {
+        font-size: 1.1rem;
+      }
+      
+      input, select, textarea {
+        padding: 12px 10px;
+        margin-bottom: 14px;
+      }
+      
+      button {
+        padding: 12px 16px;
+        min-height: 48px;
+      }
+    }
+    
+    /* Prevent zoom on iOS */
+    @supports (-webkit-touch-callout: none) {
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+    
+    /* Improve touch targets */
+    input[type="number"], 
+    input[type="text"], 
+    select, 
+    textarea {
+      min-height: 48px;
+    }
+    
+    /* Loading state for form submission */
+    .form-loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    
+    .form-loading button {
+      background: #6c757d;
+      cursor: not-allowed;
+    }
+    
+    /* Focus visible for accessibility */
+    input:focus-visible, 
+    select:focus-visible, 
+    textarea:focus-visible, 
+    button:focus-visible {
+      outline: 2px solid #007bff;
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
-  <h1>Dreams & Culture Questionnaire</h1>
-  <form action="submit.php" method="POST">
-    <h2>Section 1: About You</h2>
-    <label>What is your age?</label>
-    <input type="number" name="age" required>
+  <div class="container">
+    <h1>Dreams & Culture Questionnaire</h1>
+    <form action="submit.php" method="POST" id="questionnaire-form">
+      <h2>Section 1: About You</h2>
+      <label for="age">What is your age?</label>
+      <input type="number" id="age" name="age" required min="1" max="120">
 
-    <label>What is your gender?</label>
-    <input type="text" name="gender" required>
+      <label for="gender">What is your gender?</label>
+      <input type="text" id="gender" name="gender" required>
 
-    <label>What is your tribe or cultural background?</label>
-    <input type="text" name="tribe" required>
+      <label for="tribe">What is your tribe or cultural background?</label>
+      <input type="text" id="tribe" name="tribe" required>
 
-    <label>What language(s) do you speak at home?</label>
-    <input type="text" name="languages" required>
+      <label for="languages">What language(s) do you speak at home?</label>
+      <input type="text" id="languages" name="languages" required>
 
-    <label>Where do you currently live (village, town, county, country)?</label>
-    <input type="text" name="location" required>
+      <label for="location">Where do you currently live (village, town, county, country)?</label>
+      <input type="text" id="location" name="location" required>
 
-    <h2>Section 2: Dream Habits</h2>
-    <label>How often do you remember your dreams?</label>
-    <select name="dream_frequency" required>
-      <option>Every night</option>
-      <option>A few times a week</option>
-      <option>Occasionally</option>
-      <option>Rarely</option>
-      <option>Never</option>
-    </select>
+      <h2>Section 2: Dream Habits</h2>
+      <label for="dream_frequency">How often do you remember your dreams?</label>
+      <select id="dream_frequency" name="dream_frequency" required>
+        <option value="">Please select...</option>
+        <option value="every_night">Every night</option>
+        <option value="few_times_week">A few times a week</option>
+        <option value="occasionally">Occasionally</option>
+        <option value="rarely">Rarely</option>
+        <option value="never">Never</option>
+      </select>
 
-    <label>When you remember a dream, do you usually tell someone about it?</label>
-    <select name="tell_someone" required>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
+      <label for="tell_someone">When you remember a dream, do you usually tell someone about it?</label>
+      <select id="tell_someone" name="tell_someone" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
 
-    <label>If yes, who do you tell? (Family, friends, spiritual leader, etc.)</label>
-    <input type="text" name="tell_whom">
+      <label for="tell_whom">If yes, who do you tell? (Family, friends, spiritual leader, etc.)</label>
+      <input type="text" id="tell_whom" name="tell_whom">
 
-    <label>Do you write down or record your dreams?</label>
-    <select name="record_dreams" required>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
+      <label for="record_dreams">Do you write down or record your dreams?</label>
+      <select id="record_dreams" name="record_dreams" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
 
-    <h2>Section 3: Cultural Beliefs About Dreams</h2>
-    <label>In your culture or family, do people believe dreams have special meanings?</label>
-    <select name="special_meanings" required>
-      <option>Yes</option>
-      <option>No</option>
-      <option>Not Sure</option>
-    </select>
+      <h2>Section 3: Cultural Beliefs About Dreams</h2>
+      <label for="special_meanings">In your culture or family, do people believe dreams have special meanings?</label>
+      <select id="special_meanings" name="special_meanings" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+        <option value="not_sure">Not Sure</option>
+      </select>
 
-    <label>Please explain your answer.</label>
-    <textarea name="explanation"></textarea>
+      <label for="explanation">Please explain your answer.</label>
+      <textarea id="explanation" name="explanation" placeholder="Share your thoughts about dream meanings in your culture..."></textarea>
 
-    <label>Are there any traditional stories, proverbs, or sayings about dreams in your community? Please share an example if you know one.</label>
-    <textarea name="stories"></textarea>
+      <label for="stories">Are there any traditional stories, proverbs, or sayings about dreams in your community? Please share an example if you know one.</label>
+      <textarea id="stories" name="stories" placeholder="Share any traditional stories or sayings about dreams..."></textarea>
 
-    <label>Who do you go to for dream interpretation or advice?</label>
-    <input type="text" name="go_to">
+      <label for="go_to">Who do you go to for dream interpretation or advice?</label>
+      <input type="text" id="go_to" name="go_to" placeholder="e.g., Elder, spiritual leader, family member...">
 
-    <h2>Section 4: Personal Dream Experiences</h2>
-    <label>Can you describe a dream you remember clearly?</label>
-    <textarea name="dream_description"></textarea>
+      <h2>Section 4: Personal Dream Experiences</h2>
+      <label for="dream_description">Can you describe a dream you remember clearly?</label>
+      <textarea id="dream_description" name="dream_description" placeholder="Describe a memorable dream..."></textarea>
 
-    <label>How did you feel during and after this dream?</label>
-    <input type="text" name="dream_feeling">
+      <label for="dream_feeling">How did you feel during and after this dream?</label>
+      <input type="text" id="dream_feeling" name="dream_feeling" placeholder="Describe your feelings...">
 
-    <label>Did you or others attach any meaning to this dream?</label>
-    <select name="attach_meaning" required>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
+      <label for="attach_meaning">Did you or others attach any meaning to this dream?</label>
+      <select id="attach_meaning" name="attach_meaning" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
 
-    <label>If yes, what did it mean?</label>
-    <textarea name="meaning_description"></textarea>
+      <label for="meaning_description">If yes, what did it mean?</label>
+      <textarea id="meaning_description" name="meaning_description" placeholder="Describe the meaning or interpretation..."></textarea>
 
-    <h2>Section 5: Dream Symbols and Meaning</h2>
-    <label>Are there specific symbols, animals, or people that often appear in your dreams?</label>
-    <textarea name="symbols"></textarea>
+      <h2>Section 5: Dream Symbols and Meaning</h2>
+      <label for="symbols">Are there specific symbols, animals, or people that often appear in your dreams?</label>
+      <textarea id="symbols" name="symbols" placeholder="Describe recurring symbols or elements..."></textarea>
 
-    <label>What do you think these symbols mean to you or your culture?</label>
-    <textarea name="symbol_meanings"></textarea>
+      <label for="symbol_meanings">What do you think these symbols mean to you or your culture?</label>
+      <textarea id="symbol_meanings" name="symbol_meanings" placeholder="Share your interpretation of these symbols..."></textarea>
 
-    <label>Are there dreams that are considered good or bad omens in your community? Please give examples.</label>
-    <textarea name="omens_examples"></textarea>
+      <label for="omens_examples">Are there dreams that are considered good or bad omens in your community? Please give examples.</label>
+      <textarea id="omens_examples" name="omens_examples" placeholder="Share examples of dreams considered as omens..."></textarea>
 
-    <h2>Section 6: Impact of Dreams</h2>
-    <label>Has a dream ever influenced your real-life decisions or actions?</label>
-    <select name="influenced" required>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
+      <h2>Section 6: Impact of Dreams</h2>
+      <label for="influenced">Has a dream ever influenced your real-life decisions or actions?</label>
+      <select id="influenced" name="influenced" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
 
-    <label>If yes, please describe.</label>
-    <textarea name="influence_description"></textarea>
+      <label for="influence_description">If yes, please describe.</label>
+      <textarea id="influence_description" name="influence_description" placeholder="Describe how a dream influenced your decisions..."></textarea>
 
-    <label>Do you ever pray, perform rituals, or seek help after certain dreams?</label>
-    <select name="rituals" required>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
+      <label for="rituals">Do you ever pray, perform rituals, or seek help after certain dreams?</label>
+      <select id="rituals" name="rituals" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
 
-    <label>If yes, what kind of actions do you take?</label>
-    <textarea name="ritual_actions"></textarea>
+      <label for="ritual_actions">If yes, what kind of actions do you take?</label>
+      <textarea id="ritual_actions" name="ritual_actions" placeholder="Describe any rituals or actions you take..."></textarea>
 
-    <h2>Section 7: Openness to Sharing</h2>
-    <label>Are you comfortable sharing your dreams with an AI for research and cultural understanding?</label>
-    <select name="share_with_ai" required>
-      <option>Yes</option>
-      <option>No</option>
-      <option>Maybe</option>
-    </select>
+      <h2>Section 7: Openness to Sharing</h2>
+      <label for="share_with_ai">Are you comfortable sharing your dreams with an AI for research and cultural understanding?</label>
+      <select id="share_with_ai" name="share_with_ai" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+        <option value="maybe">Maybe</option>
+      </select>
 
-    <label>Is there anything else about dreams and your culture you'd like to share?</label>
-    <textarea name="additional_comments"></textarea>
+      <label for="additional_comments">Is there anything else about dreams and your culture you'd like to share?</label>
+      <textarea id="additional_comments" name="additional_comments" placeholder="Share any additional thoughts or insights..."></textarea>
 
-    <h2>Optional Demographic Consent</h2>
-    <label>Do you give permission for your (anonymous) responses to be used to help improve Nocti Weave Core’s cultural knowledge?</label>
-    <select name="consent" required>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
+      <h2>Optional Demographic Consent</h2>
+      <label for="consent">Do you give permission for your (anonymous) responses to be used to help improve Nocti Weave Core's cultural knowledge?</label>
+      <select id="consent" name="consent" required>
+        <option value="">Please select...</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
 
-    <button type="submit">Submit</button>
-  </form>
+      <button type="submit">Submit Questionnaire</button>
+    </form>
+  </div>
+
+  <script>
+    // Prevent zoom on iOS when focusing inputs
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input, select, textarea');
+      
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          // Ensure font-size is at least 16px to prevent zoom
+          if (window.innerWidth <= 768) {
+            this.style.fontSize = '16px';
+          }
+        });
+      });
+      
+      // Form submission handling
+      const form = document.getElementById('questionnaire-form');
+      form.addEventListener('submit', function(e) {
+        const container = document.querySelector('.container');
+        container.classList.add('form-loading');
+        
+        // Remove loading state after 3 seconds (in case of slow server response)
+        setTimeout(() => {
+          container.classList.remove('form-loading');
+        }, 3000);
+      });
+    });
+  </script>
 </body>
 </html>
+
