@@ -394,6 +394,76 @@ if (empty($_SESSION['admin_logged_in'])) {
             background: #f8f9fa;
         }
         
+        .summary-section {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .summary-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .summary-header h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+        
+        .summary-description {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .narrative-summary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .narrative-summary:hover {
+            border-color: #007bff;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .narrative-header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .narrative-header h3 {
+            color: #007bff;
+            font-size: 1.3rem;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .narrative-content {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .narrative-paragraph {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2c3e50;
+            margin: 0;
+            text-align: justify;
+            font-weight: 400;
+        }
+        
         .table-section {
             margin-top: 40px;
             padding-top: 32px;
@@ -522,6 +592,32 @@ if (empty($_SESSION['admin_logged_in'])) {
                 text-align: center;
             }
             
+            .narrative-summary {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+            
+            .narrative-header h3 {
+                font-size: 1.1rem;
+            }
+            
+            .narrative-content {
+                padding: 16px 18px;
+            }
+            
+            .narrative-paragraph {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+            
+            .summary-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .summary-description {
+                font-size: 1rem;
+            }
+            
             .table-header {
                 flex-direction: column;
                 gap: 12px;
@@ -553,6 +649,32 @@ if (empty($_SESSION['admin_logged_in'])) {
             
             .section-title {
                 font-size: 1rem;
+            }
+            
+            .narrative-summary {
+                padding: 12px;
+                margin-bottom: 16px;
+            }
+            
+            .narrative-header h3 {
+                font-size: 1rem;
+            }
+            
+            .narrative-content {
+                padding: 12px 14px;
+            }
+            
+            .narrative-paragraph {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+            
+            .summary-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .summary-description {
+                font-size: 0.9rem;
             }
             
             th, td {
@@ -754,28 +876,230 @@ if (empty($_SESSION['admin_logged_in'])) {
                         echo '</div>';
                     }
                     
-                    // Table view for detailed review
-                    echo '<div class="table-section">';
-                    echo '<div class="table-header">';
-                    echo '<h2>Raw Data Table View</h2>';
-                    echo '<button class="table-toggle" onclick="toggleTable()">Show/Hide Table</button>';
+                    // Comprehensive Summary Section
+                    echo '<div class="summary-section">';
+                    echo '<div class="summary-header">';
+                    echo '<h2>📝 Comprehensive Response Summaries</h2>';
+                    echo '<p class="summary-description">Each response is presented as a flowing narrative paragraph that captures the essence of the participant\'s cultural background, dream experiences, and beliefs.</p>';
                     echo '</div>';
-                    echo '<div class="table-container" id="tableContainer">';
-                    echo '<table>';
-                    echo '<tr>';
-                    foreach ($headers as $header) {
-                        echo '<th>' . htmlspecialchars($header) . '</th>';
-                    }
-                    echo '</tr>';
-                    foreach ($allData as $resp) {
-                        echo '<tr>';
-                        foreach ($headers as $header) {
-                            echo '<td>' . nl2br(htmlspecialchars($resp[$header] ?? '')) . '</td>';
+                    
+                    foreach ($allData as $index => $resp) {
+                        echo '<div class="narrative-summary">';
+                        echo '<div class="narrative-header">';
+                        echo '<h3>Response #' . ($index + 1) . ' - Cultural Dream Narrative</h3>';
+                        echo '</div>';
+                        
+                        // Generate comprehensive narrative paragraph
+                        $narrative = [];
+                        
+                        // Personal introduction
+                        $intro = "I am";
+                        if (!empty($resp['age'])) {
+                            $intro .= " a " . htmlspecialchars($resp['age']) . "-year-old";
                         }
-                        echo '</tr>';
+                        if (!empty($resp['gender'])) {
+                            $intro .= " " . htmlspecialchars($resp['gender']);
+                        }
+                        if (!empty($resp['tribe'])) {
+                            $intro .= " from " . htmlspecialchars($resp['tribe']) . " culture";
+                        }
+                        if (!empty($resp['languages'])) {
+                            $intro .= ". I speak " . htmlspecialchars($resp['languages']);
+                        }
+                        if (!empty($resp['location'])) {
+                            $intro .= " and currently live in " . htmlspecialchars($resp['location']);
+                        }
+                        $intro .= ".";
+                        $narrative[] = $intro;
+                        
+                        // Dream habits narrative
+                        if (!empty($resp['dream_frequency'])) {
+                            $freq_text = strtolower($resp['dream_frequency']);
+                            if ($freq_text == 'every_night' || $freq_text == 'every night') {
+                                $dream_habit = "When it comes to my dreams, I remember them every single night.";
+                            } elseif ($freq_text == 'few_times_week' || $freq_text == 'a few times a week') {
+                                $dream_habit = "I remember my dreams a few times each week.";
+                            } elseif ($freq_text == 'occasionally') {
+                                $dream_habit = "I occasionally remember my dreams.";
+                            } elseif ($freq_text == 'rarely') {
+                                $dream_habit = "I rarely remember my dreams.";
+                            } elseif ($freq_text == 'never') {
+                                $dream_habit = "I never remember my dreams.";
+                            } else {
+                                $dream_habit = "Regarding dream frequency, " . htmlspecialchars($resp['dream_frequency']) . ".";
+                            }
+                            
+                            if (!empty($resp['tell_someone'])) {
+                                if (strtolower($resp['tell_someone']) == 'yes') {
+                                    $dream_habit .= " When I do remember them, I usually share them with others";
+                                    if (!empty($resp['tell_whom'])) {
+                                        $dream_habit .= ", particularly with " . htmlspecialchars($resp['tell_whom']);
+                                    }
+                                    $dream_habit .= ".";
+                                } else {
+                                    $dream_habit .= " When I do remember them, I typically keep them to myself.";
+                                }
+                            }
+                            
+                            if (!empty($resp['record_dreams'])) {
+                                if (strtolower($resp['record_dreams']) == 'yes') {
+                                    $dream_habit .= " I also make it a practice to write down or record my dreams.";
+                                } else {
+                                    $dream_habit .= " I don\'t usually write down or record my dreams.";
+                                }
+                            }
+                            
+                            $narrative[] = $dream_habit;
+                        }
+                        
+                        // Cultural beliefs narrative
+                        if (!empty($resp['special_meanings']) || !empty($resp['explanation'])) {
+                            $cultural_belief = "";
+                            if (!empty($resp['special_meanings'])) {
+                                $meaning_response = strtolower($resp['special_meanings']);
+                                if ($meaning_response == 'yes') {
+                                    $cultural_belief = "In my culture and family, we strongly believe that dreams carry special meanings and significance.";
+                                } elseif ($meaning_response == 'no') {
+                                    $cultural_belief = "In my culture and family, dreams are not typically viewed as having special meanings.";
+                                } else {
+                                    $cultural_belief = "Regarding whether dreams have special meanings in my culture, I would say " . htmlspecialchars($resp['special_meanings']) . ".";
+                                }
+                            }
+                            
+                            if (!empty($resp['explanation'])) {
+                                $cultural_belief .= " " . htmlspecialchars($resp['explanation']);
+                            }
+                            
+                            if (!empty($resp['stories'])) {
+                                $cultural_belief .= " Our community has traditional stories and sayings about dreams: " . htmlspecialchars($resp['stories']);
+                            }
+                            
+                            if (!empty($resp['go_to'])) {
+                                $cultural_belief .= " When I need dream interpretation or advice, I turn to " . htmlspecialchars($resp['go_to']) . ".";
+                            }
+                            
+                            if (!empty($cultural_belief)) {
+                                $narrative[] = $cultural_belief;
+                            }
+                        }
+                        
+                        // Personal dream experience narrative
+                        if (!empty($resp['dream_description']) || !empty($resp['dream_feeling'])) {
+                            $dream_experience = "";
+                            if (!empty($resp['dream_description'])) {
+                                $dream_experience = "One dream that stands out clearly in my memory is this: " . htmlspecialchars($resp['dream_description']);
+                            }
+                            
+                            if (!empty($resp['dream_feeling'])) {
+                                $dream_experience .= " During and after this dream, I felt " . htmlspecialchars($resp['dream_feeling']) . ".";
+                            }
+                            
+                            if (!empty($resp['attach_meaning'])) {
+                                if (strtolower($resp['attach_meaning']) == 'yes') {
+                                    $dream_experience .= " Both I and others attached meaning to this dream.";
+                                    if (!empty($resp['meaning_description'])) {
+                                        $dream_experience .= " The meaning we found was: " . htmlspecialchars($resp['meaning_description']);
+                                    }
+                                } else {
+                                    $dream_experience .= " Neither I nor others attached any particular meaning to this dream.";
+                                }
+                            }
+                            
+                            if (!empty($dream_experience)) {
+                                $narrative[] = $dream_experience;
+                            }
+                        }
+                        
+                        // Symbols and meanings narrative
+                        if (!empty($resp['symbols']) || !empty($resp['symbol_meanings'])) {
+                            $symbols_narrative = "";
+                            if (!empty($resp['symbols'])) {
+                                $symbols_narrative = "In my dreams, certain symbols, animals, or people appear regularly: " . htmlspecialchars($resp['symbols']) . ".";
+                            }
+                            
+                            if (!empty($resp['symbol_meanings'])) {
+                                $symbols_narrative .= " To me and my culture, these symbols mean: " . htmlspecialchars($resp['symbol_meanings']) . ".";
+                            }
+                            
+                            if (!empty($resp['omens_examples'])) {
+                                $symbols_narrative .= " In our community, certain dreams are considered omens: " . htmlspecialchars($resp['omens_examples']);
+                            }
+                            
+                            if (!empty($symbols_narrative)) {
+                                $narrative[] = $symbols_narrative;
+                            }
+                        }
+                        
+                        // Impact and rituals narrative
+                        if (!empty($resp['influenced']) || !empty($resp['rituals'])) {
+                            $impact_narrative = "";
+                            if (!empty($resp['influenced'])) {
+                                if (strtolower($resp['influenced']) == 'yes') {
+                                    $impact_narrative = "Dreams have indeed influenced my real-life decisions and actions.";
+                                    if (!empty($resp['influence_description'])) {
+                                        $impact_narrative .= " Specifically: " . htmlspecialchars($resp['influence_description']);
+                                    }
+                                } else {
+                                    $impact_narrative = "Dreams have not significantly influenced my real-life decisions or actions.";
+                                }
+                            }
+                            
+                            if (!empty($resp['rituals'])) {
+                                if (strtolower($resp['rituals']) == 'yes') {
+                                    $impact_narrative .= " After certain dreams, I do perform rituals, pray, or seek help.";
+                                    if (!empty($resp['ritual_actions'])) {
+                                        $impact_narrative .= " The actions I take include: " . htmlspecialchars($resp['ritual_actions']);
+                                    }
+                                } else {
+                                    $impact_narrative .= " I don\'t typically perform rituals or seek help after dreams.";
+                                }
+                            }
+                            
+                            if (!empty($impact_narrative)) {
+                                $narrative[] = $impact_narrative;
+                            }
+                        }
+                        
+                        // Sharing and consent narrative
+                        if (!empty($resp['share_with_ai']) || !empty($resp['consent'])) {
+                            $sharing_narrative = "";
+                            if (!empty($resp['share_with_ai'])) {
+                                $ai_comfort = strtolower($resp['share_with_ai']);
+                                if ($ai_comfort == 'yes') {
+                                    $sharing_narrative = "I am comfortable sharing my dreams with AI for research and cultural understanding.";
+                                } elseif ($ai_comfort == 'no') {
+                                    $sharing_narrative = "I am not comfortable sharing my dreams with AI for research purposes.";
+                                } else {
+                                    $sharing_narrative = "Regarding sharing dreams with AI, I feel " . htmlspecialchars($resp['share_with_ai']) . ".";
+                                }
+                            }
+                            
+                            if (!empty($resp['consent'])) {
+                                if (strtolower($resp['consent']) == 'yes') {
+                                    $sharing_narrative .= " I give my permission for my anonymous responses to be used to improve cultural knowledge systems.";
+                                } else {
+                                    $sharing_narrative .= " I do not give permission for my responses to be used for research purposes.";
+                                }
+                            }
+                            
+                            if (!empty($resp['additional_comments'])) {
+                                $sharing_narrative .= " Additionally, I would like to share: " . htmlspecialchars($resp['additional_comments']);
+                            }
+                            
+                            if (!empty($sharing_narrative)) {
+                                $narrative[] = $sharing_narrative;
+                            }
+                        }
+                        
+                        // Combine all narrative parts into flowing paragraphs
+                        $full_narrative = implode(" ", $narrative);
+                        
+                        echo '<div class="narrative-content">';
+                        echo '<p class="narrative-paragraph">' . $full_narrative . '</p>';
+                        echo '</div>';
+                        echo '</div>';
                     }
-                    echo '</table>';
-                    echo '</div>';
+                    
                     echo '</div>';
                 }
             } else {
@@ -790,18 +1114,23 @@ if (empty($_SESSION['admin_logged_in'])) {
     </div>
     
     <script>
-        function toggleTable() {
-            const tableContainer = document.getElementById('tableContainer');
-            tableContainer.classList.toggle('show');
-        }
-        
         // Add smooth scrolling for better UX
         document.addEventListener('DOMContentLoaded', function() {
             const responseCards = document.querySelectorAll('.response-card');
+            const narrativeSummaries = document.querySelectorAll('.narrative-summary');
             
             responseCards.forEach(card => {
                 card.addEventListener('click', function() {
                     this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            narrativeSummaries.forEach(summary => {
+                summary.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.01)';
                     setTimeout(() => {
                         this.style.transform = '';
                     }, 200);
