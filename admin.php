@@ -267,6 +267,10 @@ if (empty($_SESSION['admin_logged_in'])) {
             transform: translateY(-2px);
         }
         
+        .response-card.collapsed .response-content {
+            display: none;
+        }
+        
         .response-header {
             display: flex;
             justify-content: space-between;
@@ -274,6 +278,18 @@ if (empty($_SESSION['admin_logged_in'])) {
             margin-bottom: 16px;
             padding-bottom: 12px;
             border-bottom: 1px solid #dee2e6;
+        }
+        
+        .response-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .response-header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .response-id {
@@ -288,6 +304,49 @@ if (empty($_SESSION['admin_logged_in'])) {
         .response-date {
             color: #6c757d;
             font-size: 0.9rem;
+        }
+        
+        .action-btn {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .action-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+        
+        .action-btn.copy-btn {
+            background: #28a745;
+        }
+        
+        .action-btn.copy-btn:hover {
+            background: #218838;
+        }
+        
+        .action-btn.pdf-btn {
+            background: #dc3545;
+        }
+        
+        .action-btn.pdf-btn:hover {
+            background: #c82333;
+        }
+        
+        .action-btn.toggle-btn {
+            background: #17a2b8;
+        }
+        
+        .action-btn.toggle-btn:hover {
+            background: #138496;
         }
         
         .response-summary {
@@ -427,6 +486,7 @@ if (empty($_SESSION['admin_logged_in'])) {
             margin-bottom: 32px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            position: relative;
         }
         
         .narrative-summary:hover {
@@ -435,10 +495,17 @@ if (empty($_SESSION['admin_logged_in'])) {
             transform: translateY(-2px);
         }
         
+        .narrative-summary.collapsed .narrative-content {
+            display: none;
+        }
+        
         .narrative-header {
             margin-bottom: 20px;
             padding-bottom: 16px;
             border-bottom: 2px solid #007bff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .narrative-header h3 {
@@ -446,6 +513,11 @@ if (empty($_SESSION['admin_logged_in'])) {
             font-size: 1.3rem;
             margin: 0;
             font-weight: 600;
+        }
+        
+        .narrative-actions {
+            display: flex;
+            gap: 8px;
         }
         
         .narrative-content {
@@ -543,6 +615,26 @@ if (empty($_SESSION['admin_logged_in'])) {
             opacity: 0.5;
         }
         
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
         /* Enhanced mobile responsiveness */
         @media (max-width: 768px) {
             body {
@@ -592,9 +684,20 @@ if (empty($_SESSION['admin_logged_in'])) {
                 text-align: center;
             }
             
+            .response-header-right {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
             .narrative-summary {
                 padding: 16px;
                 margin-bottom: 20px;
+            }
+            
+            .narrative-header {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
             }
             
             .narrative-header h3 {
@@ -685,6 +788,11 @@ if (empty($_SESSION['admin_logged_in'])) {
             td {
                 max-width: 120px;
             }
+            
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -708,11 +816,14 @@ if (empty($_SESSION['admin_logged_in'])) {
                 $row = 0;
                 $headers = [];
                 $allData = [];
-                while (($data = fgetcsv($handle)) !== false) {
+                while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
                     if ($row === 0) {
                         $headers = $data;
                     } else {
-                        $allData[] = array_combine($headers, $data);
+                        // Ensure data array has same length as headers
+                        if (count($data) === count($headers)) {
+                            $allData[] = array_combine($headers, $data);
+                        }
                     }
                     $row++;
                 }
@@ -743,10 +854,17 @@ if (empty($_SESSION['admin_logged_in'])) {
                     
                     // Show each response as a beautifully formatted card with intelligent summary
                     foreach ($allData as $index => $resp) {
-                        echo '<div class="response-card">';
+                        echo '<div class="response-card" id="response-' . ($index + 1) . '">';
                         echo '<div class="response-header">';
+                        echo '<div class="response-header-left">';
                         echo '<div class="response-id">Response #' . ($index + 1) . '</div>';
                         echo '<div class="response-date">' . date('M j, Y') . '</div>';
+                        echo '</div>';
+                        echo '<div class="response-header-right">';
+                        echo '<button class="action-btn toggle-btn" onclick="toggleResponse(' . ($index + 1) . ')">📁 Collapse</button>';
+                        echo '<button class="action-btn copy-btn" onclick="copyResponse(' . ($index + 1) . ')">📋 Copy</button>';
+                        echo '<button class="action-btn pdf-btn" onclick="downloadPDF(' . ($index + 1) . ')">📄 PDF</button>';
+                        echo '</div>';
                         echo '</div>';
                         
                         // Generate intelligent summary
@@ -776,7 +894,7 @@ if (empty($_SESSION['admin_logged_in'])) {
                             echo '<div class="response-summary">' . implode(', ', $summary_parts) . '.</div>';
                         }
                         
-                        echo '<div class="response-content">';
+                        echo '<div class="response-content" id="content-' . ($index + 1) . '">';
                         
                         // Personal Information Section
                         if (!empty($resp['age']) || !empty($resp['gender']) || !empty($resp['tribe']) || !empty($resp['languages']) || !empty($resp['location'])) {
@@ -884,9 +1002,14 @@ if (empty($_SESSION['admin_logged_in'])) {
                     echo '</div>';
                     
                     foreach ($allData as $index => $resp) {
-                        echo '<div class="narrative-summary">';
+                        echo '<div class="narrative-summary" id="narrative-' . ($index + 1) . '">';
                         echo '<div class="narrative-header">';
                         echo '<h3>Response #' . ($index + 1) . ' - Cultural Dream Narrative</h3>';
+                        echo '<div class="narrative-actions">';
+                        echo '<button class="action-btn toggle-btn" onclick="toggleNarrative(' . ($index + 1) . ')">📁 Collapse</button>';
+                        echo '<button class="action-btn copy-btn" onclick="copyNarrative(' . ($index + 1) . ')">📋 Copy</button>';
+                        echo '<button class="action-btn pdf-btn" onclick="downloadNarrativePDF(' . ($index + 1) . ')">📄 PDF</button>';
+                        echo '</div>';
                         echo '</div>';
                         
                         // Generate comprehensive narrative paragraph
@@ -1094,7 +1217,7 @@ if (empty($_SESSION['admin_logged_in'])) {
                         // Combine all narrative parts into flowing paragraphs
                         $full_narrative = implode(" ", $narrative);
                         
-                        echo '<div class="narrative-content">';
+                        echo '<div class="narrative-content" id="narrative-content-' . ($index + 1) . '">';
                         echo '<p class="narrative-paragraph">' . $full_narrative . '</p>';
                         echo '</div>';
                         echo '</div>';
@@ -1113,14 +1236,106 @@ if (empty($_SESSION['admin_logged_in'])) {
         ?>
     </div>
     
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+    
     <script>
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show';
+            if (type === 'error') {
+                toast.style.background = '#dc3545';
+            } else {
+                toast.style.background = '#28a745';
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Copy response content to clipboard
+        function copyResponse(responseId) {
+            const content = document.getElementById('content-' + responseId);
+            const text = content.innerText || content.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Response #' + responseId + ' copied to clipboard!');
+            }).catch(err => {
+                showToast('Failed to copy response', 'error');
+                console.error('Copy failed:', err);
+            });
+        }
+        
+        // Copy narrative content to clipboard
+        function copyNarrative(responseId) {
+            const content = document.getElementById('narrative-content-' + responseId);
+            const text = content.innerText || content.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Narrative #' + responseId + ' copied to clipboard!');
+            }).catch(err => {
+                showToast('Failed to copy narrative', 'error');
+                console.error('Copy failed:', err);
+            });
+        }
+        
+        // Toggle response visibility
+        function toggleResponse(responseId) {
+            const card = document.getElementById('response-' + responseId);
+            const content = document.getElementById('content-' + responseId);
+            const button = card.querySelector('.toggle-btn');
+            
+            if (card.classList.contains('collapsed')) {
+                card.classList.remove('collapsed');
+                content.style.display = 'block';
+                button.innerHTML = '📁 Collapse';
+            } else {
+                card.classList.add('collapsed');
+                content.style.display = 'none';
+                button.innerHTML = '📂 Expand';
+            }
+        }
+        
+        // Toggle narrative visibility
+        function toggleNarrative(responseId) {
+            const narrative = document.getElementById('narrative-' + responseId);
+            const content = document.getElementById('narrative-content-' + responseId);
+            const button = narrative.querySelector('.toggle-btn');
+            
+            if (narrative.classList.contains('collapsed')) {
+                narrative.classList.remove('collapsed');
+                content.style.display = 'block';
+                button.innerHTML = '📁 Collapse';
+            } else {
+                narrative.classList.add('collapsed');
+                content.style.display = 'none';
+                button.innerHTML = '📂 Expand';
+            }
+        }
+        
+        // Download PDF (placeholder - will be implemented in next phase)
+        function downloadPDF(responseId) {
+            window.open('generate_pdf.php?response_id=' + responseId, '_blank');
+        }
+        
+        // Download narrative PDF (placeholder - will be implemented in next phase)
+        function downloadNarrativePDF(responseId) {
+            window.open('generate_pdf.php?narrative_id=' + responseId, '_blank');
+        }
+        
         // Add smooth scrolling for better UX
         document.addEventListener('DOMContentLoaded', function() {
             const responseCards = document.querySelectorAll('.response-card');
             const narrativeSummaries = document.querySelectorAll('.narrative-summary');
             
             responseCards.forEach(card => {
-                card.addEventListener('click', function() {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger on button clicks
+                    if (e.target.tagName === 'BUTTON') return;
+                    
                     this.style.transform = 'scale(1.02)';
                     setTimeout(() => {
                         this.style.transform = '';
@@ -1129,7 +1344,10 @@ if (empty($_SESSION['admin_logged_in'])) {
             });
             
             narrativeSummaries.forEach(summary => {
-                summary.addEventListener('click', function() {
+                summary.addEventListener('click', function(e) {
+                    // Don't trigger on button clicks
+                    if (e.target.tagName === 'BUTTON') return;
+                    
                     this.style.transform = 'scale(1.01)';
                     setTimeout(() => {
                         this.style.transform = '';
