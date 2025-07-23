@@ -9,3 +9,5 @@ services:
     ports:
       - "8080:80"
     restart: unless-stopped
+    command: >
+      bash -c "chown -R www-data:www-data /var/www/html && apache2-foreground"
