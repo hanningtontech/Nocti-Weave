@@ -27,15 +27,120 @@ if (empty($_SESSION['admin_logged_in'])) {
     <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Admin Login - Dreams & Culture</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 0; background: #f8f9fa; }
-            .login-box { max-width: 400px; margin: 100px auto; border: 1px solid #ccc; padding: 30px; border-radius: 8px; background: #fff; }
-            input { width: 100%; padding: 10px; margin-bottom: 15px; font-size: 16px; }
-            button { padding: 12px 24px; font-size: 18px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; width: 100%; }
-            button:hover { background: #0056b3; }
-            .error { color: red; }
+            * {
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                margin: 0;
+                padding: 0;
+                background: #f8f9fa;
+                line-height: 1.6;
+                -webkit-text-size-adjust: 100%;
+                -webkit-font-smoothing: antialiased;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .login-box {
+                max-width: 400px;
+                width: 100%;
+                margin: 20px;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                padding: 32px 24px;
+            }
+            
+            h2 {
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 24px;
+                color: #2c3e50;
+                font-size: 1.8rem;
+                font-weight: 700;
+            }
+            
+            .error {
+                color: #dc3545;
+                background: #f8d7da;
+                border: 1px solid #f5c6cb;
+                border-radius: 8px;
+                padding: 12px 16px;
+                margin-bottom: 20px;
+                font-size: 0.9rem;
+            }
+            
+            input {
+                width: 100%;
+                padding: 16px 12px;
+                margin-bottom: 20px;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                font-size: 16px;
+                font-family: inherit;
+                background: #fff;
+                transition: all 0.3s ease;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                touch-action: manipulation;
+            }
+            
+            input:focus {
+                border-color: #007bff;
+                outline: none;
+                background: #fff;
+                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+                transform: translateY(-1px);
+            }
+            
+            button {
+                width: 100%;
+                padding: 16px 24px;
+                background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                touch-action: manipulation;
+                min-height: 56px;
+            }
+            
+            button:hover {
+                background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+            }
+            
+            button:active {
+                transform: translateY(0);
+            }
+            
+            @media (max-width: 480px) {
+                .login-box {
+                    margin: 10px;
+                    padding: 24px 16px;
+                }
+                
+                h2 {
+                    font-size: 1.5rem;
+                }
+                
+                input, button {
+                    padding: 14px 12px;
+                    font-size: 16px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -59,36 +164,423 @@ if (empty($_SESSION['admin_logged_in'])) {
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Submitted Responses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard - Dreams & Culture Questionnaire</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f8f9fa; }
-        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 24px 20px; }
-        h1 { text-align: center; margin-top: 0; }
-        .logout { float: right; font-size: 16px; color: #007bff; text-decoration: none; margin-top: 8px; }
-        .logout:hover { text-decoration: underline; }
-        .summary { background: #f1f3f6; border-radius: 8px; padding: 16px; margin-bottom: 24px; font-size: 1.08em; line-height: 1.7; }
-        table { border-collapse: collapse; width: 100%; margin-top: 30px; }
-        th, td { border: 1px solid #ccc; padding: 8px; word-break: break-word; }
-        th { background: #f0f0f0; }
-        @media (max-width: 700px) {
-            .container { max-width: 98vw; margin: 10px 1vw; padding: 12px 2vw; }
-            table, th, td { font-size: 13px; }
-            .summary { font-size: 1em; }
+        * {
+            box-sizing: border-box;
         }
-        @media (max-width: 400px) {
-            .container { padding: 6px 1vw; }
-            h1 { font-size: 1.1em; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 32px 24px;
+            min-height: calc(100vh - 40px);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logout {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .response-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .response-card:hover {
+            border-color: #007bff;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .response-id {
+            background: #007bff;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .response-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .response-summary {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-left: 4px solid #007bff;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-style: italic;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .response-content {
+            line-height: 1.7;
+            color: #495057;
+        }
+        
+        .section-title {
+            color: #007bff;
+            font-weight: 600;
+            margin: 16px 0 8px 0;
+            font-size: 1.1rem;
+        }
+        
+        .response-text {
+            margin-bottom: 12px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .emotion-highlight {
+            background: #f8d7da;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-left: 3px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .consent-yes {
+            background: #d4edda;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+            color: #155724;
+            font-weight: 600;
+        }
+        
+        .consent-no {
+            background: #f8d7da;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-left: 3px solid #dc3545;
+            color: #721c24;
+            font-weight: 600;
+        }
+        
+        .cultural-insight {
+            margin: 12px 0;
+        }
+        
+        .insight-box, .dream-box, .symbol-box, .meaning-box, .influence-box, .comment-box {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-style: normal;
+        }
+        
+        .insight-box {
+            border-left: 4px solid #17a2b8;
+            background: #f0fdff;
+        }
+        
+        .dream-box {
+            border-left: 4px solid #6f42c1;
+            background: #f8f5ff;
+        }
+        
+        .symbol-box {
+            border-left: 4px solid #fd7e14;
+            background: #fff8f0;
+        }
+        
+        .meaning-box {
+            border-left: 4px solid #20c997;
+            background: #f0fff8;
+        }
+        
+        .influence-box {
+            border-left: 4px solid #e83e8c;
+            background: #fff0f6;
+        }
+        
+        .comment-box {
+            border-left: 4px solid #6c757d;
+            background: #f8f9fa;
+        }
+        
+        .table-section {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-toggle {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .table-toggle:hover {
+            background: #5a6268;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .table-container.show {
+            display: block;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+        }
+        
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px 8px;
+            text-align: left;
+            word-break: break-word;
+            vertical-align: top;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            font-size: 0.9rem;
+            max-width: 200px;
+        }
+        
+        .no-responses {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .no-responses-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        /* Enhanced mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            
+            .container {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                padding: 20px 16px;
+                min-height: 100vh;
+                box-shadow: none;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .stat-card {
+                padding: 16px;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem;
+            }
+            
+            .response-card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .response-header {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+            }
+            
+            td {
+                max-width: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px 12px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .response-card {
+                padding: 12px;
+            }
+            
+            .section-title {
+                font-size: 1rem;
+            }
+            
+            th, td {
+                padding: 6px 4px;
+                font-size: 0.75rem;
+            }
+            
+            td {
+                max-width: 120px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Submitted Responses <a href="?logout=1" class="logout">Logout</a></h1>
+        <div class="header">
+            <h1>Dreams & Culture Admin Dashboard</h1>
+            <a href="?logout=1" class="logout">Logout</a>
+        </div>
+        
         <?php
         $csvFile = 'responses.csv';
         if (!file_exists($csvFile)) {
-            echo '<p>No responses yet.</p>';
+            echo '<div class="no-responses">
+                    <div class="no-responses-icon">📋</div>
+                    <h3>No responses yet</h3>
+                    <p>Responses will appear here once users start submitting the questionnaire.</p>
+                  </div>';
         } else {
             if (($handle = fopen($csvFile, 'r')) !== false) {
                 $row = 0;
@@ -103,45 +595,173 @@ if (empty($_SESSION['admin_logged_in'])) {
                     $row++;
                 }
                 fclose($handle);
+                
                 if (count($allData) === 0) {
-                    echo '<p>No responses yet.</p>';
+                    echo '<div class="no-responses">
+                            <div class="no-responses-icon">📋</div>
+                            <h3>No responses yet</h3>
+                            <p>Responses will appear here once users start submitting the questionnaire.</p>
+                          </div>';
                 } else {
-                    // Show each response as a human-readable paragraph
-                    foreach ($allData as $resp) {
-                        // Build a readable summary
-                        $summary = [];
-                        if (!empty($resp['age'])) $summary[] = "My age is " . htmlspecialchars($resp['age']) . ".";
-                        if (!empty($resp['gender'])) $summary[] = "I am " . htmlspecialchars($resp['gender']) . " in gender.";
-                        if (!empty($resp['tribe'])) $summary[] = "I am from the " . htmlspecialchars($resp['tribe']) . " tribe/cultural background.";
-                        if (!empty($resp['languages'])) $summary[] = "I speak " . htmlspecialchars($resp['languages']) . " at home.";
-                        if (!empty($resp['location'])) $summary[] = "I currently live in " . htmlspecialchars($resp['location']) . ".";
-                        if (!empty($resp['dream_frequency'])) $summary[] = "I remember my dreams: " . htmlspecialchars($resp['dream_frequency']) . ".";
-                        if (!empty($resp['tell_someone'])) $summary[] = "When I remember a dream, I " . (strtolower($resp['tell_someone']) == 'yes' ? 'usually tell someone' : 'do not usually tell anyone') . ".";
-                        if (!empty($resp['tell_whom'])) $summary[] = "I tell: " . htmlspecialchars($resp['tell_whom']) . ".";
-                        if (!empty($resp['record_dreams'])) $summary[] = "I " . (strtolower($resp['record_dreams']) == 'yes' ? 'record' : 'do not record') . " my dreams.";
-                        if (!empty($resp['special_meanings'])) $summary[] = "In my culture/family, dreams have special meanings: " . htmlspecialchars($resp['special_meanings']) . ".";
-                        if (!empty($resp['explanation'])) $summary[] = "Explanation: " . htmlspecialchars($resp['explanation']);
-                        if (!empty($resp['stories'])) $summary[] = "Traditional stories/proverbs/sayings: " . htmlspecialchars($resp['stories']);
-                        if (!empty($resp['go_to'])) $summary[] = "I go to " . htmlspecialchars($resp['go_to']) . " for dream interpretation/advice.";
-                        if (!empty($resp['dream_description'])) $summary[] = "A dream I remember: " . htmlspecialchars($resp['dream_description']);
-                        if (!empty($resp['dream_feeling'])) $summary[] = "I felt: " . htmlspecialchars($resp['dream_feeling']);
-                        if (!empty($resp['attach_meaning'])) $summary[] = "Did I/others attach meaning: " . htmlspecialchars($resp['attach_meaning']) . ".";
-                        if (!empty($resp['meaning_description'])) $summary[] = "Meaning: " . htmlspecialchars($resp['meaning_description']);
-                        if (!empty($resp['symbols'])) $summary[] = "Symbols/animals/people in dreams: " . htmlspecialchars($resp['symbols']);
-                        if (!empty($resp['symbol_meanings'])) $summary[] = "Symbol meanings: " . htmlspecialchars($resp['symbol_meanings']);
-                        if (!empty($resp['omens_examples'])) $summary[] = "Dreams considered omens: " . htmlspecialchars($resp['omens_examples']);
-                        if (!empty($resp['influenced'])) $summary[] = "Dreams influenced my actions: " . htmlspecialchars($resp['influenced']) . ".";
-                        if (!empty($resp['influence_description'])) $summary[] = "Influence description: " . htmlspecialchars($resp['influence_description']);
-                        if (!empty($resp['rituals'])) $summary[] = "After certain dreams, I " . (strtolower($resp['rituals']) == 'yes' ? 'perform rituals/pray/seek help' : 'do not perform rituals/pray/seek help') . ".";
-                        if (!empty($resp['ritual_actions'])) $summary[] = "Actions taken: " . htmlspecialchars($resp['ritual_actions']);
-                        if (!empty($resp['share_with_ai'])) $summary[] = "Comfortable sharing with AI: " . htmlspecialchars($resp['share_with_ai']) . ".";
-                        if (!empty($resp['additional_comments'])) $summary[] = "Additional comments: " . htmlspecialchars($resp['additional_comments']);
-                        if (!empty($resp['consent'])) $summary[] = "Consent for use: " . htmlspecialchars($resp['consent']) . ".";
-                        echo '<div class="summary">' . implode(' ', $summary) . '</div>';
+                    // Statistics
+                    echo '<div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-number">' . count($allData) . '</div>
+                                <div class="stat-label">Total Responses</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">' . count(array_filter($allData, function($r) { return !empty($r['consent']) && strtolower($r['consent']) === 'yes'; })) . '</div>
+                                <div class="stat-label">Consented for Research</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">' . count(array_filter($allData, function($r) { return !empty($r['share_with_ai']) && strtolower($r['share_with_ai']) === 'yes'; })) . '</div>
+                                <div class="stat-label">Comfortable with AI</div>
+                            </div>
+                          </div>';
+                    
+                    // Show each response as a beautifully formatted card with intelligent summary
+                    foreach ($allData as $index => $resp) {
+                        echo '<div class="response-card">';
+                        echo '<div class="response-header">';
+                        echo '<div class="response-id">Response #' . ($index + 1) . '</div>';
+                        echo '<div class="response-date">' . date('M j, Y') . '</div>';
+                        echo '</div>';
+                        
+                        // Generate intelligent summary
+                        $summary_parts = [];
+                        if (!empty($resp['age']) && !empty($resp['gender']) && !empty($resp['location'])) {
+                            $summary_parts[] = "A " . htmlspecialchars($resp['age']) . "-year-old " . htmlspecialchars($resp['gender']) . " from " . htmlspecialchars($resp['location']);
+                        }
+                        if (!empty($resp['tribe'])) {
+                            $summary_parts[] = "of " . htmlspecialchars($resp['tribe']) . " cultural background";
+                        }
+                        if (!empty($resp['dream_frequency'])) {
+                            $freq_text = strtolower($resp['dream_frequency']);
+                            if ($freq_text == 'every_night' || $freq_text == 'every night') {
+                                $summary_parts[] = "who remembers dreams every night";
+                            } elseif ($freq_text == 'few_times_week' || $freq_text == 'a few times a week') {
+                                $summary_parts[] = "who remembers dreams a few times a week";
+                            } elseif ($freq_text == 'occasionally') {
+                                $summary_parts[] = "who occasionally remembers dreams";
+                            } elseif ($freq_text == 'rarely') {
+                                $summary_parts[] = "who rarely remembers dreams";
+                            } elseif ($freq_text == 'never') {
+                                $summary_parts[] = "who never remembers dreams";
+                            }
+                        }
+                        
+                        if (!empty($summary_parts)) {
+                            echo '<div class="response-summary">' . implode(', ', $summary_parts) . '.</div>';
+                        }
+                        
+                        echo '<div class="response-content">';
+                        
+                        // Personal Information Section
+                        if (!empty($resp['age']) || !empty($resp['gender']) || !empty($resp['tribe']) || !empty($resp['languages']) || !empty($resp['location'])) {
+                            echo '<div class="section-title">👤 Personal Information</div>';
+                            if (!empty($resp['age'])) echo '<div class="response-text">Age: <span class="highlight">' . htmlspecialchars($resp['age']) . '</span></div>';
+                            if (!empty($resp['gender'])) echo '<div class="response-text">Gender: <span class="highlight">' . htmlspecialchars($resp['gender']) . '</span></div>';
+                            if (!empty($resp['tribe'])) echo '<div class="response-text">Cultural Background: <span class="highlight">' . htmlspecialchars($resp['tribe']) . '</span></div>';
+                            if (!empty($resp['languages'])) echo '<div class="response-text">Languages: <span class="highlight">' . htmlspecialchars($resp['languages']) . '</span></div>';
+                            if (!empty($resp['location'])) echo '<div class="response-text">Location: <span class="highlight">' . htmlspecialchars($resp['location']) . '</span></div>';
+                        }
+                        
+                        // Dream Habits Section
+                        if (!empty($resp['dream_frequency']) || !empty($resp['tell_someone']) || !empty($resp['tell_whom']) || !empty($resp['record_dreams'])) {
+                            echo '<div class="section-title">🌙 Dream Habits</div>';
+                            if (!empty($resp['dream_frequency'])) echo '<div class="response-text">Dream Frequency: <span class="highlight">' . htmlspecialchars($resp['dream_frequency']) . '</span></div>';
+                            if (!empty($resp['tell_someone'])) {
+                                $tellText = strtolower($resp['tell_someone']) == 'yes' ? 'Usually tells someone about dreams' : 'Does not usually tell anyone about dreams';
+                                echo '<div class="response-text">Sharing Dreams: <span class="highlight">' . $tellText . '</span></div>';
+                            }
+                            if (!empty($resp['tell_whom'])) echo '<div class="response-text">Tells: <span class="highlight">' . htmlspecialchars($resp['tell_whom']) . '</span></div>';
+                            if (!empty($resp['record_dreams'])) {
+                                $recordText = strtolower($resp['record_dreams']) == 'yes' ? 'Records dreams' : 'Does not record dreams';
+                                echo '<div class="response-text">Recording: <span class="highlight">' . $recordText . '</span></div>';
+                            }
+                        }
+                        
+                        // Cultural Beliefs Section - Prioritized for cultural research
+                        if (!empty($resp['special_meanings']) || !empty($resp['explanation']) || !empty($resp['stories']) || !empty($resp['go_to'])) {
+                            echo '<div class="section-title">🏛️ Cultural Beliefs About Dreams</div>';
+                            if (!empty($resp['special_meanings'])) echo '<div class="response-text">Dreams Have Special Meanings: <span class="highlight">' . htmlspecialchars($resp['special_meanings']) . '</span></div>';
+                            if (!empty($resp['explanation'])) {
+                                echo '<div class="response-text cultural-insight">Cultural Explanation: <div class="insight-box">' . nl2br(htmlspecialchars($resp['explanation'])) . '</div></div>';
+                            }
+                            if (!empty($resp['stories'])) {
+                                echo '<div class="response-text cultural-insight">Traditional Stories/Proverbs: <div class="insight-box">' . nl2br(htmlspecialchars($resp['stories'])) . '</div></div>';
+                            }
+                            if (!empty($resp['go_to'])) echo '<div class="response-text">Goes to for Interpretation: <span class="highlight">' . htmlspecialchars($resp['go_to']) . '</span></div>';
+                        }
+                        
+                        // Personal Dream Experiences Section - Enhanced presentation
+                        if (!empty($resp['dream_description']) || !empty($resp['dream_feeling']) || !empty($resp['attach_meaning']) || !empty($resp['meaning_description'])) {
+                            echo '<div class="section-title">💭 Personal Dream Experiences</div>';
+                            if (!empty($resp['dream_description'])) {
+                                echo '<div class="response-text dream-narrative">Dream Description: <div class="dream-box">' . nl2br(htmlspecialchars($resp['dream_description'])) . '</div></div>';
+                            }
+                            if (!empty($resp['dream_feeling'])) echo '<div class="response-text">Feelings: <span class="emotion-highlight">' . htmlspecialchars($resp['dream_feeling']) . '</span></div>';
+                            if (!empty($resp['attach_meaning'])) echo '<div class="response-text">Attached Meaning: <span class="highlight">' . htmlspecialchars($resp['attach_meaning']) . '</span></div>';
+                            if (!empty($resp['meaning_description'])) {
+                                echo '<div class="response-text">Meaning Description: <div class="meaning-box">' . nl2br(htmlspecialchars($resp['meaning_description'])) . '</div></div>';
+                            }
+                        }
+                        
+                        // Dream Symbols Section - Enhanced for research value
+                        if (!empty($resp['symbols']) || !empty($resp['symbol_meanings']) || !empty($resp['omens_examples'])) {
+                            echo '<div class="section-title">🔮 Dream Symbols and Meanings</div>';
+                            if (!empty($resp['symbols'])) {
+                                echo '<div class="response-text symbol-data">Recurring Symbols: <div class="symbol-box">' . nl2br(htmlspecialchars($resp['symbols'])) . '</div></div>';
+                            }
+                            if (!empty($resp['symbol_meanings'])) {
+                                echo '<div class="response-text symbol-data">Symbol Meanings: <div class="symbol-box">' . nl2br(htmlspecialchars($resp['symbol_meanings'])) . '</div></div>';
+                            }
+                            if (!empty($resp['omens_examples'])) {
+                                echo '<div class="response-text cultural-insight">Dreams as Omens: <div class="insight-box">' . nl2br(htmlspecialchars($resp['omens_examples'])) . '</div></div>';
+                            }
+                        }
+                        
+                        // Impact of Dreams Section
+                        if (!empty($resp['influenced']) || !empty($resp['influence_description']) || !empty($resp['rituals']) || !empty($resp['ritual_actions'])) {
+                            echo '<div class="section-title">⚡ Impact of Dreams</div>';
+                            if (!empty($resp['influenced'])) echo '<div class="response-text">Dreams Influenced Actions: <span class="highlight">' . htmlspecialchars($resp['influenced']) . '</span></div>';
+                            if (!empty($resp['influence_description'])) {
+                                echo '<div class="response-text">Influence Description: <div class="influence-box">' . nl2br(htmlspecialchars($resp['influence_description'])) . '</div></div>';
+                            }
+                            if (!empty($resp['rituals'])) {
+                                $ritualText = strtolower($resp['rituals']) == 'yes' ? 'Performs rituals/prayers after certain dreams' : 'Does not perform rituals/prayers after dreams';
+                                echo '<div class="response-text">Rituals: <span class="highlight">' . $ritualText . '</span></div>';
+                            }
+                            if (!empty($resp['ritual_actions'])) {
+                                echo '<div class="response-text cultural-insight">Ritual Actions: <div class="insight-box">' . nl2br(htmlspecialchars($resp['ritual_actions'])) . '</div></div>';
+                            }
+                        }
+                        
+                        // Sharing and Consent Section
+                        if (!empty($resp['share_with_ai']) || !empty($resp['additional_comments']) || !empty($resp['consent'])) {
+                            echo '<div class="section-title">🤝 Sharing and Consent</div>';
+                            if (!empty($resp['share_with_ai'])) echo '<div class="response-text">Comfortable Sharing with AI: <span class="highlight">' . htmlspecialchars($resp['share_with_ai']) . '</span></div>';
+                            if (!empty($resp['additional_comments'])) {
+                                echo '<div class="response-text">Additional Comments: <div class="comment-box">' . nl2br(htmlspecialchars($resp['additional_comments'])) . '</div></div>';
+                            }
+                            if (!empty($resp['consent'])) {
+                                $consentClass = strtolower($resp['consent']) == 'yes' ? 'consent-yes' : 'consent-no';
+                                echo '<div class="response-text">Research Consent: <span class="' . $consentClass . '">' . htmlspecialchars($resp['consent']) . '</span></div>';
+                            }
+                        }
+                        
+                        echo '</div>';
+                        echo '</div>';
                     }
+                    
                     // Table view for detailed review
-                    echo '<h2 style="margin-top:40px;">Raw Table View</h2>';
-                    echo '<div style="overflow-x:auto;"><table>';
+                    echo '<div class="table-section">';
+                    echo '<div class="table-header">';
+                    echo '<h2>Raw Data Table View</h2>';
+                    echo '<button class="table-toggle" onclick="toggleTable()">Show/Hide Table</button>';
+                    echo '</div>';
+                    echo '<div class="table-container" id="tableContainer">';
+                    echo '<table>';
                     echo '<tr>';
                     foreach ($headers as $header) {
                         echo '<th>' . htmlspecialchars($header) . '</th>';
@@ -154,13 +774,41 @@ if (empty($_SESSION['admin_logged_in'])) {
                         }
                         echo '</tr>';
                     }
-                    echo '</table></div>';
+                    echo '</table>';
+                    echo '</div>';
+                    echo '</div>';
                 }
             } else {
-                echo '<p>Could not open responses file.</p>';
+                echo '<div class="no-responses">
+                        <div class="no-responses-icon">❌</div>
+                        <h3>Error</h3>
+                        <p>Could not open responses file.</p>
+                      </div>';
             }
         }
         ?>
     </div>
+    
+    <script>
+        function toggleTable() {
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.classList.toggle('show');
+        }
+        
+        // Add smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            const responseCards = document.querySelectorAll('.response-card');
+            
+            responseCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+
